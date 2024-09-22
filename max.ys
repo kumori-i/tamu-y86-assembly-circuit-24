@@ -1,0 +1,32 @@
+# Execution begins at address 0, this is a max function which stores max of 3 in %rax
+	.pos 0
+	irmovq stack, %rsp  	# Set stack pointer 
+    irmovq $5, %rdi     # First argument
+    irmovq $6, %rsi     # Second argument
+    irmovq $2, %rdx     # Third argument
+	irmovq $8, %r9     # Incrementer
+    jmp max            # Jump to max function
+max:
+    pushq %rdi          # Save first argument on stack
+    pushq %rsi          # Save second argument on stack
+    pushq %rdx          # Save third argument on stack
+	nop     # Test nop for logisim
+    mrmovq (%rsp), %rax     # Pop third argument into %rax
+	addq %r9, %rsp        # Increment stack pointer, now on second argument
+    subq %rdi, %rdx     # Subtract first argument from third argument
+    jg FirstGreater    # If result is greater, third argument is greater than first
+    rrmovq %rdi, %rax # Otherwise, first argument is greater, so put in %rax
+FirstGreater:
+    popq %rdi           # Pop second argument into %rdi
+	rrmovq %rax,%rdx    # Prep %rdx with current max to use for subtraction calculation
+    subq %rdi, %rdx     # Subtract second argument from maximum so far
+    jle SecondGreater   # If result is less than or equal to zero, second argument is greater
+    jmp End             # Otherwise, maximum so far is the greatest, so keep and jump to end
+SecondGreater:
+    rrmovq %rsi, %rax # Second argument is greater, so move into %rax
+End:
+    halt                 # End
+
+# The stack starts here and grows to lower addresses
+	.pos 0x200		
+stack:

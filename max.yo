@@ -1,0 +1,32 @@
+                            | # Execution begins at address 0, this is a max function which stores max of 3 in %rax
+0x000:                      | 	.pos 0
+0x000: 30f40002000000000000 | 	irmovq stack, %rsp  	# Set stack pointer 
+0x00a: 30f70500000000000000 |     irmovq $5, %rdi     # First argument
+0x014: 30f60600000000000000 |     irmovq $6, %rsi     # Second argument
+0x01e: 30f20200000000000000 |     irmovq $2, %rdx     # Third argument
+0x028: 30f90800000000000000 | 	irmovq $8, %r9     # Incrementer
+0x032: 703b00000000000000   |     jmp max            # Jump to max function
+0x03b:                      | max:
+0x03b: a07f                 |     pushq %rdi          # Save first argument on stack
+0x03d: a06f                 |     pushq %rsi          # Save second argument on stack
+0x03f: a02f                 |     pushq %rdx          # Save third argument on stack
+0x041: 10                   | 	nop     # Test nop for logisim
+0x042: 50040000000000000000 |     mrmovq (%rsp), %rax     # Pop third argument into %rax
+0x04c: 6094                 | 	addq %r9, %rsp        # Increment stack pointer, now on second argument
+0x04e: 6172                 |     subq %rdi, %rdx     # Subtract first argument from third argument
+0x050: 765b00000000000000   |     jg FirstGreater    # If result is greater, third argument is greater than first
+0x059: 2070                 |     rrmovq %rdi, %rax # Otherwise, first argument is greater, so put in %rax
+0x05b:                      | FirstGreater:
+0x05b: b07f                 |     popq %rdi           # Pop second argument into %rdi
+0x05d: 2002                 | 	rrmovq %rax,%rdx    # Prep %rdx with current max to use for subtraction calculation
+0x05f: 6172                 |     subq %rdi, %rdx     # Subtract second argument from maximum so far
+0x061: 717300000000000000   |     jle SecondGreater   # If result is less than or equal to zero, second argument is greater
+0x06a: 707500000000000000   |     jmp End             # Otherwise, maximum so far is the greatest, so keep and jump to end
+0x073:                      | SecondGreater:
+0x073: 2060                 |     rrmovq %rsi, %rax # Second argument is greater, so move into %rax
+0x075:                      | End:
+0x075: 00                   |     halt                 # End
+                            | 
+                            | # The stack starts here and grows to lower addresses
+0x200:                      | 	.pos 0x200		
+0x200:                      | stack:

@@ -1,0 +1,17 @@
+main:                        #mathematical function that computes rcx^rdx (exponent)
+irmovq $0x16, %rcx           #moves integer into %rcx
+irmovq $0x04, %rdx           #moves integer into %rdx
+irmovq $0x01, %r10           #used for subtraction
+multouter:
+rrmovq %rcx , %r8            #used for iteration
+irmovq $0x16, %r9            #used for iteration
+multinner:
+addq   %r8  , %rcx
+subq   %r10 , %r9
+jg     multinner
+subq   %r10 , %rdx
+jg multouter
+rmmovq %rcx, 0x1000(%r10)
+rrmovq %rcx, %rax
+ret                          #returns the result
+halt                         #halts the processor

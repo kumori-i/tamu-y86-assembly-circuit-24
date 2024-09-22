@@ -1,0 +1,25 @@
+#Fibonacci Sequence (7)
+
+begin:
+    irmovq $0, %rbx     #%rbx represents f1
+    irmovq $1, %rcx     #%rcx represents f2
+    irmovq $7, %rdx     #%rdx represents the fibonacci number we're trying to get (fn)
+
+loop:
+    irmovq $2, %rsi
+    subq %rsi, %rdx       
+    jle finish           #if fn is < 0 jump to finish
+    addq %rcx, %rbx     # f1 = f1 + f2
+    addq %rbx, %rcx     #f2 = f1 + f2 (f1 was just updated)
+    jmp loop
+
+finish:
+    irmovq $1, %rsi
+    andq %rdx, %rsi   #checking if fn is even
+    je even         
+    rrmovq %rbx, %rax 
+    ret
+
+even: 
+    rrmovq %rdx, %rax 
+    ret

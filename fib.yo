@@ -1,0 +1,26 @@
+                            | #Fibonacci Sequence (7)
+                            | 
+0x000:                      | begin:
+0x000: 30f30000000000000000 |     irmovq $0, %rbx     #%rbx represents f1
+0x00a: 30f10100000000000000 |     irmovq $1, %rcx     #%rcx represents f2
+0x014: 30f20700000000000000 |     irmovq $7, %rdx     #%rdx represents the fibonacci number we're trying to get
+                            | 
+0x01e:                      | loop:
+0x01e: 30f60200000000000000 |     irmovq $2, %rsi
+0x028: 6162                 |     subq %rsi, %rdx       
+0x02a: 714000000000000000   |     jle finish           #if fn is < 0 jump to finish
+0x033: 6013                 |     addq %rcx, %rbx     # f1 = f1 + f2
+0x035: 6031                 |     addq %rbx, %rcx     #f2 = f1 + f2 (f1 was just updated)
+0x037: 701e00000000000000   |     jmp loop
+                            | 
+0x040:                      | finish:
+0x040: 30f60100000000000000 |     irmovq $1, %rsi
+0x04a: 6226                 |     andq %rdx, %rsi   #checking if fn is even
+0x04c: 735800000000000000   |     je even 
+0x055: 2010                 |     rrmovq %rcx, %rax
+0x057: 00                   |     halt
+                            | 
+0x058:                      | even: 
+0x058: 6013                 |     addq %rcx, %rbx     # f1 = f1 + f2
+0x05a: 2030                 |     rrmovq %rbx, %rax
+0x05c: 00                   |     halt

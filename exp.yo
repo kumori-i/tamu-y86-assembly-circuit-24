@@ -1,0 +1,16 @@
+0x000:                      | main:                        #mathematical function that computes rcx^(rdx + 1) (exponent)
+0x000: 30f11600000000000000 | irmovq $0x16, %rcx           #moves integer into %rcx
+0x00a: 30f20300000000000000 | irmovq $0x03, %rdx           #moves integer into %rdx, 
+0x014: 30fa0100000000000000 | irmovq $0x01, %r10           #used for subtraction
+0x01e:                      | multouter:                   #outer multiplication loop
+0x01e: 2018                 | rrmovq %rcx , %r8            #used for iteration
+0x020: 30f91500000000000000 | irmovq $0x15, %r9            #used for iteration
+0x02a:                      | multinner:
+0x02a: 6081                 | addq   %r8  , %rcx
+0x02c: 61a9                 | subq   %r10 , %r9
+0x02e: 762a00000000000000   | jg     multinner
+0x037: 61a2                 | subq   %r10 , %rdx
+0x039: 761e00000000000000   | jg multouter
+0x042: 401a6400000000000000 | rmmovq %rcx, 100(%r10)
+0x04c: 2010                 | rrmovq %rcx, %rax
+0x04e: 90                   | ret                          #returns the result, 22^4
